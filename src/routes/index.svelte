@@ -664,15 +664,15 @@ let update_station = async (subcriteria_scores) => {
 
 let graph;
 onMount(async () => {
-    let stations_resp = await fetch('http://127.0.0.1:5173/api/stations')
+    let stations_resp = await fetch('https://esg-graph.vercel.app/api/stations')
     let stations_resp_data = await stations_resp.json()
     stations = stations_resp_data.stations
 
-    let events_resp = await fetch('http://127.0.0.1:5173/api/events')
+    let events_resp = await fetch('https://esg-graph.vercel.app/api/events')
     let events_resp_data = await events_resp.json()
     events = events_resp_data.events
 })
-$: fetch(`http://127.0.0.1:5173/api/station/${station}`).then(resp => resp.json()).then(data => update_station(data.scores))
+$: fetch(`https://esg-graph.vercel.app/api/station/${station}`).then(resp => resp.json()).then(data => update_station(data.scores))
 
 
 </script>
