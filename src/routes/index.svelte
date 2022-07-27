@@ -5,229 +5,232 @@ import dagre from 'cytoscape-dagre';
 
 cytoscape.use(dagre)
 
+// let base_url = "http://127.0.0.1:5173"
+let base_url = "https://esg-graph.vercel.app"
 let station = 1
 let selected_data = [];
 let show_graph = true;
 let show_criteria_list = false;
 let stations = [];
 let events = []
+let scores = [[2.0,1.0,2.0,2.0,1.0,3.0,3.0,3.0,2.0,2.0,2.0,2.0,2.0,1.0,1.0,3.0,1.0,2.0,0.0,0.0,0.0,4.0,3.0,3.0,2.0,1.0,1.0,2.0,3.0,2.0,2.0,2.0,3.0],[4.0,1.0,2.0,4.0,4.0,2.0,2.0,3.0,2.0,2.0,3.0,2.0,3.0,4.0,4.0,4.0],[4.0,3.0,3.0,1.0,2.0,2.0,4.0,3.0,3.0]]
 let data = {
-    esg: 89.1,
+    esg: 0,
     criteria: [
         {
             name: 'E',
-            weight: 5,
+            weight: 1,
             subcriterias: [
                 {
                     name: 'Рациональное использование водных ресурсов',
-                    weight: 10,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Объём технической (охлаждающей) воды',
                             score: 2,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Объём забираемой сетевой воды',
                             score: 4,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Объём сбрасываемых сточных вод',
                             score: 4,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Качество сбрасываемых сточных вод',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Объём водопотребления',
                             score: 4,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Качество воды',
                             score: 2,
-                            weight: 2
+                            weight: 1
                         },
                     ]
                 },
                 {
                     name: 'Токсичные выбросы и отходы',
-                    weight: 4,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Объём выбрасываемых загрязняющих веществ',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Объём образования отходов',
                             score: 3,
-                            weight: 3,
+                            weight: 1,
                         },
                         {
                             name: 'Накопление и размещение отходов',
                             score: 3,
-                            weight: 3,
+                            weight: 1,
                         },
                         {
                             name: 'Взаимоотношения с подрядчиками',
                             score: 3,
-                            weight: 3,
+                            weight: 1,
                         },
                         {
                             name: 'Критериальные значения контролируемых диагностических показателей (критерии безопасности)',
                             score: 3,
-                            weight: 3,
+                            weight: 1,
                         },
                     ]
                 },
                 {
                     name: 'Выбросы углерода',
-                    weight: 4,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Объём выбрасываемых загрязняющих веществ',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Углеродный след',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                     ]
                 },
                 {
                     name: 'Биоразнообразие и землепользование',
-                    weight: 4,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Оценка влияния на экосистему отработанной воды в соответствии с изменением её химического состава после использования на предприятиии',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Соблюдение экологических требований и ведение экологического менеджмента',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                     ]
                 },
                 {
                     name: 'Качество воздуха и физическое воздействие',
-                    weight: 4,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Средняя концентрация примеси в воздухе',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Максимальная разовая концентрация примеси',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Приведение и поддержание технического состояния машин и механизмов, в соответствии с нормативными требованиями по выбросам вредных веществ',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Уровень шума',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Уровень электромагнитного излучения',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Уровень вибрации',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                     ]
                 },
                 {
                     name: 'Энергоэффективность',
-                    weight: 4,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Количественная оценка энергоэффективности мероприятий',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Коэффициент энергоёмкости полезного эффекта. КИУМ',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Эффективность генерации электро- / теплоэнергии. УРУТ',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Эффективность потребления энергоресурсов',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Запас срока службы турбин',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Запас срока службы котлов',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                     ]
                 },
                 {
                     name: 'Возможности в области чистых технологий (экологическая политика)',
-                    weight: 4,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Проведение исследований и разработок по созданию нового оборудования, технологий и материалов (НИР и НИОКР)',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Выполнение работ по внедрению нового оборудования, технологий и материалов (модернизация)',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                     ]
                 },
                 {
                     name: 'Мероприятия по снижению выбросов',
-                    weight: 4,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Проверка или аудит выбросов CO2',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Установление целей по сокращению выбросов CO2, указание крайних сроков',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Тенденция уровня CO2 за последние 3 года',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                         {
                             name: 'Воздействие изменения климата на изменения в компании, меры адаптации к климатическим изменениям',
                             score: 2,
-                            weight: 4
+                            weight: 1
                         },
                     ]
                 },
@@ -235,7 +238,7 @@ let data = {
         },
         {
             name: 'S',
-            weight: 3,
+            weight: 1,
             subcriterias: [
                 {
                     name: 'Охрана труда и здоровье персонала',
@@ -244,7 +247,7 @@ let data = {
                         {
                             name: 'Системы в области промышленной безопасности, надёжности и целостности',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Работоспособность средств и систем защиты',
@@ -265,12 +268,12 @@ let data = {
                         {
                             name: 'Процесс обучения основным навыкам профессии',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Оценка уровня квалификации и потенциала сотрудника ',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         }
                     ]
                 },
@@ -281,17 +284,17 @@ let data = {
                         {
                             name: 'Возникновение опасных природных явлений',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Ограничение доступа к транспортным маршрутам и объектам социальной инфраструктуры',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         },
                         {
                             name: 'Землепользование и традиционная хозяйственная деятельность',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         }
                     ]
                 },
@@ -302,17 +305,17 @@ let data = {
                         {
                             name: 'Уровень местных цен на важнейшие товары и услуги',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Финансовые показатели',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         },
                         {
                             name: 'Расчет эффективности инвестиционных вложений с помощью различных показателей',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         }
                     ]
                 },
@@ -323,27 +326,27 @@ let data = {
                         {
                             name: 'Сравнение каждой позиции отчётности с предыдущим периодом',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Запланируемые источники финансирования',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         },
                         {
                             name: 'Анализ возможностей предприятия с точки зрения финансов',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         },
                         {
                             name: 'Объективный анализ величины и структуры активов и пассивов предприятия',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         },
                         {
                             name: 'Анализ соответствия финансово-хозяйственной деятельности предприятия целям его уставной деятельности',
                             score: 4,
-                            weight: 5
+                            weight: 1
                         }
                     ]
                 },
@@ -351,11 +354,11 @@ let data = {
         },
         {
             name: 'G',
-            weight: 2,
+            weight: 1,
             subcriterias: [
                 {
                     name: 'Корпоративное управление',
-                    weight: 2,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Случаи коррупции',
@@ -365,54 +368,54 @@ let data = {
                         {
                             name: 'Отсутствие нарушений антимонопольного законодательства',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Наличие антимонопольной политики',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Диагностические показатели и признаки технического состояния объекта, частота возникновения аварийных ситуаций',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                     ]
                 },
                 {
                     name: 'Классификация персонала на предприятии',
-                    weight: 4,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Персонал предприятия по имущественным отношениям',
                             score: 0,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Персонал предприятия по категориям',
                             score: 1,
-                            weight: 3
+                            weight: 1
                         }
                     ]
                 },
                 {
                     name: 'Эффективность Совета директоров',
-                    weight: 3,
+                    weight: 1,
                     subcriterias: [
                         {
                             name: 'Наличие годового отчёта в открытом доступе',
                             score: 3,
-                            weight: 2
+                            weight: 1
                         },
                         {
                             name: 'Наличие принятых официальных документов Советом директоров',
                             score: 1,
-                            weight: 3
+                            weight: 1
                         },
                         {
                             name: 'Структура управления в компании',
                             score: 1,
-                            weight: 3
+                            weight: 1
                         },
                     ]
                 }
@@ -421,18 +424,15 @@ let data = {
     ]
 }
 let update_station = async (subcriteria_scores) => {
-    console.log(subcriteria_scores)
     data.criteria.forEach((crit, i) => {
         let counter = 0
         crit.subcriterias.forEach((subcrit, j) => {
             subcrit.subcriterias.forEach((_, k) => {
                 data.criteria[i].subcriterias[j].subcriterias[k].score = subcriteria_scores[i][counter]
-                data.criteria[i].subcriterias[j].subcriterias[k].weight = 1
+                data.criteria[i].subcriterias[j].subcriterias[k].index = counter
                 counter += 1
             })
-            data.criteria[i].subcriterias[j].weight = 1
         })
-        data.criteria[i].weight = 1
     })
     let sumcrit = 0
     let weightscrit = 0
@@ -458,22 +458,22 @@ let update_station = async (subcriteria_scores) => {
     let elements = [{data: {id: 'esg', name: 'ESG'}, grabbable: false, classes: ['esg']}]
     data.criteria.forEach((el, i) => {
         elements.push({data: {id: `${i}`, name: el.name}, grabbable: false, classes: ['el']})
-        elements.push({data: {id: `esg__${i}`, source: 'esg', target: `${i}`, weight: el.weight}, selectable: false})
+        elements.push({data: {id: `esg__${i}`, source: 'esg', target: `${i}`, target_criteria: i, weight: el.weight}, selectable: false})
 
         let sum = 0
         el.subcriterias.forEach((a) => sum += a.score)
         let avg = sum / el.subcriterias.length; 
         el.subcriterias.forEach((subel, j) => {
             elements.push({data: {id: `${i}_${j}`, name: subel.name}, grabbable: false, classes: ['subel', `${i}_subel`,`${subel.score < avg ? 'bad' : 'good'}`]})
-            elements.push({data: {id: `${i}__${j}`, source: `${i}`, target: `${i}_${j}`, weight: subel.weight}, selectable: false})
+            elements.push({data: {id: `${i}__${j}`, source: `${i}`, target: `${i}_${j}`, target_criteria: i, target_subel: j, weight: subel.weight}, selectable: false})
 
             let sumsub = 0
             subel.subcriterias.forEach((a) => sumsub += a.score)
             let avgsub = sumsub / subel.subcriterias.length; 
 
             subel.subcriterias.forEach((subsubel, k) => {
-                elements.push({data: {id: `${i}_${j}_${k}`, name: subsubel.name, score: subsubel.score}, grabbable: false, classes: ['subsubel', `${i}_${j}_subsubel`,`${subsubel.score < avgsub ? 'bad' : 'good'}`, `score_${subsubel.score}`]})
-                elements.push({data: {id: `${i}__${j}__${k}`, source: `${i}_${j}`, target: `${i}_${j}_${k}`, weight: subsubel.weight}, selectable: false})
+                elements.push({data: {id: `${i}_${j}_${k}`, name: subsubel.name, score: subsubel.score, criteria: i, index: subsubel.index}, grabbable: false, classes: ['subsubel', `${i}_${j}_subsubel`,`${subsubel.score < avgsub ? 'bad' : 'good'}`, `score_${subsubel.score}`]})
+                elements.push({data: {id: `${i}__${j}__${k}`, source: `${i}_${j}`, target: `${i}_${j}_${k}`, target_criteria: i, target_subel: j, target_subsubel: k, weight: subsubel.weight}, selectable: false})
             })
         })
     })
@@ -628,7 +628,6 @@ let update_station = async (subcriteria_scores) => {
         if (event.target.hasClass('esg') || event.target.hasClass('el') || event.target.isEdge()) return
         if (event.target.hasClass('subsubel')) {
             selected_data.push(event.target.data());
-            console.log(event.target.data())
             selected_data = selected_data
         } else {
             event.target.addClass("named")
@@ -637,6 +636,37 @@ let update_station = async (subcriteria_scores) => {
     cy.on('unselect', (event) => {
         selected_data = selected_data.filter(data => data.name !== event.target.data().name)
         event.target.removeClass("named")
+    })
+    cy.elements(`.subsubel`).forEach(el => {
+        let data = el.data()
+        el.on('cxttap', (event) => {
+            let new_score = window.prompt(data.name, data.score)
+            if (new_score !== null) {
+                scores[data.criteria][data.index] = parseInt(new_score)
+            }
+        })
+    })
+    cy.elements(`edge`).forEach(el => {
+        let edge_data = el.data()
+        let elem
+        if (edge_data.target_subsubel !== undefined)
+            elem = data.criteria[edge_data.target_criteria].subcriterias[edge_data.target_subel].subcriterias[edge_data.target_subsubel]
+        else if (edge_data.target_subel !== undefined)
+            elem = data.criteria[edge_data.target_criteria].subcriterias[edge_data.target_subel]
+        else if (edge_data.target_criteria !== undefined)
+            elem = data.criteria[edge_data.target_criteria]
+        el.on('cxttap', (event) => {
+            let new_weight = window.prompt(`Вес: ${elem.name}`, elem.weight)
+            if (new_weight !== null) {
+                if (edge_data.target_subsubel !== undefined)
+                    data.criteria[edge_data.target_criteria].subcriterias[edge_data.target_subel].subcriterias[edge_data.target_subsubel].weight = parseInt(new_weight)
+                else if (edge_data.target_subel !== undefined)
+                    data.criteria[edge_data.target_criteria].subcriterias[edge_data.target_subel].weight = parseInt(new_weight)
+                else if (edge_data.target_criteria !== undefined)
+                    data.criteria[edge_data.target_criteria].weight = parseInt(new_weight)
+                scores = scores
+            }
+        })
     })
     // cy.elements('.esg').layout({name: 'circle', avoidOverlap: false}).run()
     // cy.elements('.el').layout({name: 'circle', radius: 0, startAngle: 1/5*Math.PI, clockwise: true, avoidOverlap: false}).run()
@@ -661,23 +691,29 @@ let update_station = async (subcriteria_scores) => {
     cy.elements(`.subel`).layout({name: 'circle', radius: 350, startAngle: -1/3*Math.PI, animate: false, animationDuration: 500}).run()
     cy.elements(`.subsubel`).layout({name: 'circle', radius: 700, animate: false, animationDuration: 500}).run()
 }
-
+let apply_event = async (event) => {
+    events = events.filter((val) => val.id !== event.id)
+    event.impacts.forEach((impact) => {
+        scores[impact.category][impact.index] += impact.impact
+    })
+    console.log(event)
+}
 let graph;
 onMount(async () => {
-    let stations_resp = await fetch('https://esg-graph.vercel.app/api/stations')
+    let stations_resp = await fetch(`${base_url}/api/stations`)
     let stations_resp_data = await stations_resp.json()
     stations = stations_resp_data.stations
 
-    let events_resp = await fetch('https://esg-graph.vercel.app/api/events')
+    let events_resp = await fetch(`${base_url}/api/events`)
     let events_resp_data = await events_resp.json()
     events = events_resp_data.events
 })
-$: fetch(`https://esg-graph.vercel.app/api/station/${station}`).then(resp => resp.json()).then(data => update_station(data.scores))
-
+$: fetch(`${base_url}/api/station/${station}`).then(resp => resp.json()).then(data => scores = (data.scores))
+$: update_station(scores)
 
 </script>
 
-<div class="custom_grid h-screen">
+<div class="custom_grid h-screen max-h-screen">
     <div class="w-screen bg-gray-800 text-white shadow-md p-3 grid grid-cols-2 items-center">
         <h1 class="text-3xl">ESG-каталог</h1>
         <div class="grid grid-cols-3 items-center">
@@ -722,7 +758,7 @@ $: fetch(`https://esg-graph.vercel.app/api/station/${station}`).then(resp => res
                 </div>
                 {/each}
                 {:else if selected_data.length === 0}
-                <h1 class="text-lg text-center">Нажмите на критерий чтобы получить информацию</h1>
+                <h1 class="text-lg text-center">Нажмите на критерии чтобы получить информацию</h1>
                 {:else}
                 {#each selected_data as data}
                 <h1 class="text-lg text-left">- {data.name}, <strong>оценка: {data.score}</strong></h1>
@@ -755,6 +791,7 @@ $: fetch(`https://esg-graph.vercel.app/api/station/${station}`).then(resp => res
                 <div class="col-span-1 bg-gray-500 text-white p-2 rounded-xl">
                     <p class="text-lg">{event.name}</p>
                     <p class="text-sm">{event.description}</p>
+                    <button on:click={apply_event(event)} class="p-2 bg-emerald-600 rounded-lg hover:shadow-lg hover:scale-105 duration-300 mt-3">Применить мероприятие</button>
                 </div>
                 {/each}
             </div>
